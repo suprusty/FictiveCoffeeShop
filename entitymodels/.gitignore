@@ -1,0 +1,9 @@
+/target/
+.classpath
+.project
+.idea
+.DS_Store
+.settings
+bin
+target
+.gitignore.swp

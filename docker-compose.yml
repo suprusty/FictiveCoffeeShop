@@ -1,0 +1,60 @@
+version: '0.1'
+services:
+  mysql:
+    image: mysql/mysql-server:8.0
+    ports:
+      - "3306:3306"
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: cpassword 
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: Math123
+      MYSQL_DATABASE: coffeeshop
+    volumes:
+      - mysql-database-data-volume3:/var/lib/mysql
+    networks:
+      - coffeeshop-application-network  
+      
+      
+  order-svc:
+    build:
+      context: order-svc/
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    restart: always
+    depends_on: # Start the depends_on first
+      - mysql 
+    environment:
+      RDS_HOSTNAME: mysql
+      RDS_PORT: 3306
+      RDS_DB_NAME: coffeeshop
+      RDS_USERNAME: admin
+      RDS_PASSWORD: Math123
+    networks:
+      - coffeeshop-application-network
+  
+  barista-svc:
+    build:
+      context: barista-svc/
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    restart: always
+    depends_on: # Start the depends_on first
+      - order-svc 
+    environment:
+      RDS_HOSTNAME: mysql
+      RDS_PORT: 3306
+      RDS_DB_NAME: coffeeshop
+      RDS_USERNAME: admin
+      RDS_PASSWORD: Math123
+    networks:
+      - coffeeshop-application-network
+   
+# Volumes
+volumes:
+  mysql-database-data-volume3:
+
+networks:
+  coffeeshop-application-network:
