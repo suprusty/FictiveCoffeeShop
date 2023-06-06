@@ -1,5 +1,6 @@
 Barista-svc is responsible for handling requests related to order processing.
 1)processOrder()
+
 	waiting -> in preparation -> finished -> picked up
 	
 	The implementation cycle could be done in separate thread/task/timer. 
